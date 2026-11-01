@@ -1,1170 +1,793 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EcoPot — Grow Green, Live Clean.</title>
-<meta name="description" content="EcoPot makes biodegradable, sustainable plant pots — a beautiful plastic-free alternative for home gardeners, nurseries and plant lovers.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌱%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<style>
-/* ── DESIGN TOKENS ── */
-:root {
-  --green:   #1a4731;
-  --green-m: #2e6b4f;
-  --green-l: #e8f2ec;
-  --accent:  #c5914a;
-  --ink:     #111b14;
-  --muted:   #64776b;
-  --line:    #e4e9e6;
-  --white:   #ffffff;
-  --off:     #f9faf8;
-  --r:       16px;
-  --r-sm:    10px;
-  --sh:      0 2px 20px rgba(26,71,49,.08);
-  --sh-lg:   0 8px 40px rgba(26,71,49,.14);
-}
-
-/* ── RESET ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 76px; }
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--white);
-  color: var(--ink);
-  line-height: 1.7;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-h1,h2,h3,h4 { font-family: 'DM Serif Display', Georgia, serif; line-height: 1.15; color: var(--ink); }
-a { color: inherit; text-decoration: none; }
-button { font: inherit; cursor: pointer; border: 0; background: none; }
-img, svg { display: block; }
-
-/* ── LAYOUT ── */
-.wrap { width: min(1120px, 90%); margin: auto; }
-section { padding: 100px 0; }
-
-/* ── TYPOGRAPHY ── */
-.label {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 18px;
-}
-.label::before { content: ''; display: block; width: 22px; height: 2px; background: var(--accent); border-radius: 2px; }
-.h1 { font-size: clamp(2.8rem, 6.5vw, 5rem); margin-bottom: 22px; }
-.h2 { font-size: clamp(2rem, 4vw, 3.2rem); margin-bottom: 16px; }
-.lead { font-size: 1.1rem; color: var(--muted); max-width: 560px; line-height: 1.8; }
-.center { text-align: center; }
-.center .lead { margin: 0 auto; }
-
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 14px 28px; border-radius: 999px;
-  font-family: 'Inter', sans-serif; font-size: .9rem; font-weight: 600;
-  transition: all .25s ease;
-}
-.btn-dark { background: var(--green); color: var(--white); }
-.btn-dark:hover { background: var(--green-m); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,71,49,.28); }
-.btn-outline {
-  border: 1.5px solid rgba(26,71,49,.35); color: var(--green);
-}
-.btn-outline:hover { border-color: var(--green); background: var(--green-l); transform: translateY(-2px); }
-
-/* ── HEADER ── */
-header {
-  position: fixed; inset: 0 0 auto; z-index: 50;
-  padding: 20px 0; transition: all .3s ease;
-}
-header.scrolled {
-  background: rgba(255,255,255,.9); backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid var(--line); padding: 12px 0;
-}
-.nav { display: flex; align-items: center; justify-content: space-between; }
-.logo { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--green); }
-.logo-mark {
-  width: 38px; height: 38px; background: var(--green); border-radius: 12px;
-  display: grid; place-items: center; font-size: 1.1rem;
-}
-nav ul { display: flex; gap: 32px; list-style: none; align-items: center; }
-nav a { font-size: .88rem; font-weight: 500; color: var(--muted); transition: color .2s; }
-nav a:hover, nav a.active { color: var(--green); }
-.nav-actions { display: flex; align-items: center; gap: 12px; }
-.cart-icon {
-  position: relative; width: 42px; height: 42px; border-radius: 12px;
-  background: var(--green-l); color: var(--green);
-  display: grid; place-items: center; transition: all .2s;
-}
-.cart-icon:hover { background: var(--green); color: var(--white); }
-.badge {
-  position: absolute; top: -5px; right: -5px;
-  background: var(--accent); color: var(--white);
-  font-size: .65rem; font-weight: 700; min-width: 18px; height: 18px;
-  border-radius: 9px; display: grid; place-items: center; line-height: 1;
-}
-.burger { display: none; width: 40px; height: 40px; border-radius: 10px; background: var(--green-l); color: var(--green); flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
-.burger span { display: block; width: 20px; height: 2px; background: var(--green); border-radius: 2px; transition: .3s; }
-.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.burger.open span:nth-child(2) { opacity: 0; }
-.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh; display: flex; align-items: center;
-  padding: 120px 0 80px;
-  background: linear-gradient(160deg, var(--off) 0%, var(--white) 50%, var(--green-l) 100%);
-  position: relative; overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 75% 40%, rgba(197,145,74,.07), transparent);
-  pointer-events: none;
-}
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.hero-tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--green-l); border: 1px solid rgba(46,107,79,.2);
-  border-radius: 999px; padding: 6px 14px;
-  font-size: .78rem; font-weight: 600; color: var(--green-m); margin-bottom: 24px;
-}
-.hero h1 { font-size: clamp(3rem, 7vw, 5.2rem); line-height: 1.08; margin-bottom: 22px; }
-.hero h1 em { font-style: italic; color: var(--accent); }
-.hero-sub { font-size: 1.1rem; color: var(--muted); line-height: 1.8; max-width: 500px; margin-bottom: 38px; }
-.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-.hero-chips { display: flex; gap: 10px; margin-top: 42px; flex-wrap: wrap; }
-.chip { 
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px; border-radius: 999px;
-  background: var(--white); border: 1px solid var(--line);
-  font-size: .78rem; font-weight: 500; color: var(--muted);
-  box-shadow: var(--sh);
-}
-.hero-visual {
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-}
-.hero-bg-circle {
-  width: 420px; height: 420px; border-radius: 50%;
-  background: radial-gradient(circle, var(--green-l) 0%, rgba(232,242,236,0) 70%);
-  position: relative; display: flex; align-items: center; justify-content: center;
-}
-.hero-pot {
-  width: 260px; height: 260px; animation: float 7s ease-in-out infinite;
-}
-.float-card {
-  position: absolute; background: var(--white); border-radius: 14px;
-  padding: 12px 18px; box-shadow: var(--sh-lg);
-  font-size: .8rem; font-weight: 600; color: var(--ink);
-  border: 1px solid var(--line); white-space: nowrap;
-}
-.float-card span { display: block; font-size: .7rem; color: var(--muted); font-weight: 400; margin-top: 2px; }
-.fc1 { top: 6%; right: 0; }
-.fc2 { bottom: 10%; left: -2%; }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
-@keyframes floatB { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-.fc1 { animation: floatB 5s ease-in-out infinite; }
-.fc2 { animation: floatB 6s ease-in-out infinite .8s; }
-
-/* ── TICKER STRIP ── */
-.ticker-wrap {
-  background: var(--green); overflow: hidden; padding: 14px 0;
-  border-top: 1px solid rgba(255,255,255,.08);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-.ticker-track {
-  display: flex; gap: 0;
-  animation: tick 28s linear infinite;
-  width: max-content;
-}
-.ticker-track:hover { animation-play-state: paused; }
-.tick-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 36px; font-size: .82rem; font-weight: 500; color: rgba(255,255,255,.85);
-  white-space: nowrap;
-}
-.tick-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex: none; }
-@keyframes tick { to { transform: translateX(-50%); } }
-
-/* ── ABOUT ── */
-#about { background: var(--white); }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.about-visual {
-  position: relative; border-radius: 28px; overflow: hidden;
-  background: var(--green-l); aspect-ratio: 1 / 1.05;
-  display: flex; align-items: center; justify-content: center;
-}
-.about-svg-wrap { width: 65%; }
-.stat-float {
-  position: absolute; background: var(--white); border-radius: 16px;
-  padding: 14px 20px; box-shadow: var(--sh-lg);
-  border: 1px solid var(--line);
-}
-.sf1 { bottom: 28px; left: -18px; }
-.sf2 { top: 28px; right: -18px; }
-.stat-num { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--green); line-height: 1; }
-.stat-lbl { font-size: .75rem; color: var(--muted); margin-top: 3px; }
-.pillars { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
-.pillar {
-  display: flex; gap: 16px; align-items: flex-start;
-  padding: 20px; border-radius: var(--r);
-  border: 1px solid var(--line); background: var(--off);
-  transition: all .25s;
-}
-.pillar:hover { border-color: rgba(46,107,79,.3); background: var(--green-l); transform: translateX(6px); }
-.pill-ico {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: var(--white); display: grid; place-items: center;
-  font-size: 1.3rem; flex: none; box-shadow: var(--sh);
-}
-.pillar h4 { font-family: 'Inter', sans-serif; font-size: .95rem; font-weight: 600; margin-bottom: 3px; color: var(--ink); }
-.pillar p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
-
-/* ── PRODUCTS ── */
-#products { background: var(--off); }
-.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; margin-top: 52px; }
-.card {
-  background: var(--white); border-radius: 22px;
-  border: 1px solid var(--line); overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: all .3s ease;
-}
-.card:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); border-color: rgba(46,107,79,.15); }
-.card-img {
-  background: var(--green-l);
-  height: 220px; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-}
-.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.card:hover .card-img img { transform: scale(1.06); }
-.card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
-.card-body h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
-.card-body p { font-size: .87rem; color: var(--muted); flex: 1; margin-bottom: 18px; line-height: 1.6; }
-.card-foot { display: flex; align-items: center; justify-content: space-between; }
-.price { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--green); }
-.add-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 10px 18px; border-radius: 999px;
-  background: var(--green); color: var(--white);
-  font-size: .82rem; font-weight: 600; transition: all .2s;
-}
-.add-btn:hover { background: var(--green-m); transform: scale(1.04); }
-.products-note { text-align: center; margin-top: 28px; font-size: .82rem; color: var(--muted); font-style: italic; }
-
-/* ── WHY ── */
-#why { background: var(--white); }
-.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-top: 52px; }
-.why-card {
-  padding: 30px 22px; border-radius: 20px;
-  border: 1px solid var(--line); background: var(--off);
-  text-align: center; transition: all .3s;
-}
-.why-card:hover { background: var(--green); border-color: var(--green); transform: translateY(-6px); box-shadow: var(--sh-lg); }
-.why-card:hover h4, .why-card:hover p { color: var(--white); }
-.why-ico { font-size: 1.8rem; margin-bottom: 14px; }
-.why-card h4 { font-family: 'Inter', sans-serif; font-size: .95rem; font-weight: 600; margin-bottom: 8px; transition: color .3s; }
-.why-card p { font-size: .85rem; color: var(--muted); line-height: 1.6; transition: color .3s; }
-
-/* ── TEAM ── */
-#team { background: var(--off); }
-.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px; margin-top: 52px; }
-.member {
-  background: var(--white); border-radius: 22px; padding: 32px 22px;
-  text-align: center; border: 1px solid var(--line);
-  transition: all .3s; position: relative; overflow: hidden;
-}
-.member:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); }
-.member-av {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--green-l); color: var(--green);
-  display: grid; place-items: center;
-  font-family: 'DM Serif Display', serif; font-size: 2rem;
-  margin: 0 auto 18px; transition: all .3s;
-}
-.member:hover .member-av { background: var(--green); color: var(--white); }
-.member h4 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
-.member .role { font-size: .8rem; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
-.member p { font-size: .87rem; color: var(--muted); line-height: 1.6; }
-.member-line {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg, var(--green), var(--accent));
-  transform: scaleX(0); transform-origin: left; transition: transform .4s;
-}
-.member:hover .member-line { transform: scaleX(1); }
-
-/* ── HOW IT WORKS ── */
-#how { background: var(--white); }
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 22px; margin-top: 52px; counter-reset: step; }
-.step {
-  padding: 36px 24px 28px; border-radius: 20px;
-  border: 1px solid var(--line); background: var(--off);
-  position: relative; counter-increment: step;
-  transition: all .3s;
-}
-.step:hover { border-color: rgba(46,107,79,.3); background: var(--green-l); transform: translateY(-5px); box-shadow: var(--sh-lg); }
-.step-num {
-  position: absolute; top: -16px; left: 22px;
-  width: 34px; height: 34px; border-radius: 10px;
-  background: var(--green); color: var(--white);
-  display: grid; place-items: center;
-  font-size: .82rem; font-weight: 700; letter-spacing: -.02em;
-}
-.step-num::before { content: counter(step, decimal-leading-zero); }
-.step h4 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
-.step p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
-
-/* ── IMPACT ── */
-#impact { background: var(--green); position: relative; overflow: hidden; }
-#impact::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 80% 20%, rgba(197,145,74,.15), transparent);
-  pointer-events: none;
-}
-#impact .label { color: var(--accent); }
-#impact .label::before { background: var(--accent); }
-#impact .h2 { color: var(--white); }
-#impact .lead { color: rgba(255,255,255,.65); }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin-top: 52px; }
-.stat-box {
-  border: 1px solid rgba(255,255,255,.12); border-radius: 20px;
-  padding: 32px 24px; text-align: center;
-  background: rgba(255,255,255,.05);
-  transition: all .3s;
-}
-.stat-box:hover { background: rgba(255,255,255,.1); transform: translateY(-5px); border-color: rgba(255,255,255,.22); }
-.stat-box b { display: block; font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--white); line-height: 1; margin-bottom: 8px; }
-.stat-box span { font-size: .88rem; color: rgba(255,255,255,.6); }
-#impact .products-note { color: rgba(255,255,255,.4); }
-
-/* ── REVIEWS ── */
-#reviews { background: var(--off); }
-.reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; margin-top: 52px; }
-.review {
-  background: var(--white); border-radius: 20px; padding: 30px;
-  border: 1px solid var(--line); transition: all .3s; position: relative;
-}
-.review:hover { transform: translateY(-6px); box-shadow: var(--sh-lg); }
-.stars { color: #e0a73a; font-size: 1rem; letter-spacing: 2px; margin-bottom: 14px; }
-.review p { font-size: .93rem; color: var(--ink); line-height: 1.7; }
-.reviewer { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
-.rev-av {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: var(--green-l); color: var(--green);
-  display: grid; place-items: center;
-  font-family: 'DM Serif Display', serif; font-size: 1.1rem; flex: none;
-}
-.rev-av-name { font-weight: 600; font-size: .9rem; }
-.rev-av-role { font-size: .78rem; color: var(--muted); }
-.demo-tag {
-  display: inline-block; font-size: .67rem; font-weight: 600;
-  background: var(--green-l); color: var(--green);
-  padding: 2px 8px; border-radius: 6px; margin-left: 6px; vertical-align: middle;
-}
-.review-quote {
-  position: absolute; top: 14px; right: 22px;
-  font-family: 'DM Serif Display', serif; font-size: 4rem;
-  color: var(--green-l); line-height: 1; pointer-events: none;
-  user-select: none;
-}
-
-/* ── CONTACT ── */
-#contact { background: var(--white); }
-.contact-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 72px; margin-top: 16px; }
-.contact-info .lead { margin-bottom: 28px; }
-.contact-detail { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.c-ico {
-  width: 40px; height: 40px; border-radius: 12px;
-  background: var(--green-l); display: grid; place-items: center; font-size: 1.1rem; flex: none;
-}
-.contact-detail a { font-weight: 500; color: var(--green); border-bottom: 1px solid transparent; transition: border .2s; }
-.contact-detail a:hover { border-color: var(--green); }
-.social { display: flex; gap: 10px; margin-top: 24px; }
-.social a {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: var(--off); border: 1px solid var(--line);
-  color: var(--muted); display: grid; place-items: center; transition: all .25s;
-}
-.social a:hover { background: var(--green); color: var(--white); border-color: var(--green); transform: translateY(-3px); }
-.form-card { background: var(--off); border-radius: 24px; padding: 36px; border: 1px solid var(--line); }
-.field { margin-bottom: 18px; }
-label { display: block; font-size: .85rem; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
-input, textarea {
-  width: 100%; padding: 13px 16px;
-  border: 1.5px solid var(--line); border-radius: var(--r);
-  background: var(--white); font: inherit; font-size: .92rem;
-  color: var(--ink); transition: all .22s;
-}
-input:focus, textarea:focus {
-  outline: none; border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(46,107,79,.12);
-}
-textarea { min-height: 120px; resize: vertical; }
-.err { display: none; color: #c0392b; font-size: .78rem; margin-top: 5px; }
-.field.bad input, .field.bad textarea { border-color: #c0392b; }
-.field.bad .err { display: block; }
-.form-msg {
-  display: none; margin-top: 16px; padding: 14px 18px;
-  border-radius: 12px; background: var(--green-l);
-  border: 1px solid rgba(46,107,79,.2);
-  color: var(--green); font-size: .9rem; line-height: 1.6;
-}
-
-/* ── FOOTER ── */
-footer { background: var(--ink); color: rgba(255,255,255,.55); padding: 64px 0 28px; }
-.foot { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 44px; }
-.foot-brand .logo { color: var(--white); margin-bottom: 14px; }
-.foot-brand p { font-size: .87rem; max-width: 280px; line-height: 1.75; }
-footer h5 { font-family: 'Inter', sans-serif; font-size: .85rem; font-weight: 600; color: var(--white); margin-bottom: 16px; }
-footer ul { list-style: none; }
-footer li { margin-bottom: 10px; }
-footer a { font-size: .87rem; transition: color .2s; }
-footer a:hover { color: var(--white); }
-.copy {
-  border-top: 1px solid rgba(255,255,255,.08);
-  margin-top: 48px; padding-top: 22px;
-  text-align: center; font-size: .82rem;
-}
-
-/* ── CART DRAWER ── */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); opacity: 0; visibility: hidden; z-index: 90; transition: .3s; backdrop-filter: blur(4px); }
-.overlay.show { opacity: 1; visibility: visible; }
-.drawer {
-  position: fixed; top: 0; right: 0; height: 100%; width: min(400px, 100%);
-  background: var(--white); z-index: 100;
-  transform: translateX(100%); transition: transform .4s ease;
-  display: flex; flex-direction: column;
-  box-shadow: -8px 0 40px rgba(0,0,0,.15);
-}
-.drawer.show { transform: none; }
-.drawer-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 22px 24px; border-bottom: 1px solid var(--line);
-}
-.drawer-head h3 { font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 600; }
-.drawer-close { width: 34px; height: 34px; border-radius: 10px; background: var(--off); color: var(--muted); display: grid; place-items: center; font-size: 1.2rem; transition: all .2s; }
-.drawer-close:hover { background: var(--green); color: var(--white); }
-.cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
-.cart-empty { text-align: center; color: var(--muted); padding: 60px 10px; font-size: .95rem; }
-.cart-item {
-  display: flex; gap: 14px; align-items: center;
-  padding: 14px 0; border-bottom: 1px solid var(--line);
-}
-.cart-thumb {
-  width: 58px; height: 58px; border-radius: 12px;
-  background: var(--green-l); flex: none;
-  overflow: hidden; display: flex; align-items: center; justify-content: center;
-}
-.cart-thumb svg { width: 90%; height: 90%; }
-.cart-item h5 { font-family: 'Inter', sans-serif; font-size: .88rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
-.cart-item small { font-size: .78rem; color: var(--muted); }
-.qty-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-.qty-btn { width: 26px; height: 26px; border-radius: 8px; background: var(--off); border: 1px solid var(--line); color: var(--ink); font-weight: 600; transition: all .2s; }
-.qty-btn:hover { background: var(--green-l); }
-.qty-num { font-size: .88rem; font-weight: 600; min-width: 18px; text-align: center; }
-.rm-btn { margin-left: auto; font-size: .75rem; color: #c0392b; font-weight: 500; transition: color .2s; }
-.rm-btn:hover { color: #922b21; }
-.drawer-foot { padding: 20px 24px; border-top: 1px solid var(--line); background: var(--off); }
-.cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 1rem; font-weight: 600; }
-.cart-total .t-num { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--green); }
-.checkout-btn { width: 100%; justify-content: center; }
-.drawer-foot small { display: block; text-align: center; margin-top: 10px; font-size: .75rem; color: var(--muted); }
-
-/* ── TOAST & TOP ── */
-.toast {
-  position: fixed; bottom: 28px; left: 50%;
-  transform: translate(-50%, 20px);
-  background: var(--ink); color: var(--white);
-  padding: 12px 24px; border-radius: 999px;
-  font-size: .87rem; font-weight: 500;
-  opacity: 0; visibility: hidden; z-index: 120; transition: all .3s;
-  max-width: 90%; text-align: center;
-}
-.toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
-#scroll-top {
-  position: fixed; bottom: 28px; right: 24px;
-  width: 46px; height: 46px; border-radius: 14px;
-  background: var(--green); color: var(--white);
-  display: grid; place-items: center; font-size: 1.2rem;
-  opacity: 0; visibility: hidden; z-index: 60; transition: all .3s;
-  box-shadow: var(--sh-lg);
-}
-#scroll-top.show { opacity: 1; visibility: visible; }
-#scroll-top:hover { transform: translateY(-4px); background: var(--green-m); }
-
-/* ── REVEAL ── */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-.reveal.in { opacity: 1; transform: none; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  section { padding: 72px 0; }
-  .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
-  .hero-visual { order: -1; }
-  .hero-bg-circle { width: 320px; height: 320px; }
-  .hero-pot { width: 200px; height: 200px; }
-  .hero { padding-top: 100px; }
-  .foot { grid-template-columns: 1fr 1fr; }
-  .foot > div:first-child { grid-column: 1/-1; }
-  nav ul {
-    position: fixed; top: 0; right: 0; height: 100vh; width: min(280px, 80%);
-    background: var(--white); flex-direction: column; justify-content: center;
-    gap: 28px; transform: translateX(100%); transition: transform .4s ease;
-    box-shadow: -8px 0 30px rgba(0,0,0,.12); z-index: 60;
-  }
-  nav ul.open { transform: none; }
-  nav a { font-size: 1rem; }
-  .burger { display: flex; }
-  .sf1, .sf2 { display: none; }
-}
-@media (max-width: 600px) {
-  .hero h1 { font-size: 2.6rem; }
-  .foot { grid-template-columns: 1fr; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, .reveal { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
-  html { scroll-behavior: auto; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoPot — Sustainable Plant Pots for a Greener Tomorrow</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<!-- HIDDEN SVG DEFS -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="ico-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-    <path d="M12 22c0-6.627-5.373-12-12-12"/>
-    <path d="M12 22c0-6.627 5.373-12 12-12"/>
-    <path d="M12 22V10"/>
-  </symbol>
-  <symbol id="ico-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-    <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>
-  </symbol>
-  <symbol id="ico-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-    <path d="M12 5v14M5 12h14"/>
-  </symbol>
-  <symbol id="ico-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="5"/>
-    <circle cx="12" cy="12" r="4"/>
-    <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-  </symbol>
-  <symbol id="ico-fb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-  </symbol>
-</svg>
-
-<!-- ========== HEADER ========== -->
-<header id="header">
-  <div class="wrap nav">
-    <a href="#home" class="logo" aria-label="EcoPot home">
-      <div class="logo-mark">🌱</div>
-      EcoPot
-    </a>
-    <nav aria-label="Main navigation">
-      <ul id="menu">
-        <li><a href="#home" class="active">Home</a></li>
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <span class="logo-icon">🌿</span> EcoPot
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#products">Products</a></li>
-        <li><a href="#why">Why Us</a></li>
-        <li><a href="#team">Team</a></li>
+        <li><a href="#benefits">Benefits</a></li>
+        <li><a href="#process">How It's Made</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-    </nav>
-    <div class="nav-actions">
-      <button class="cart-icon" id="openCart" aria-label="Open shopping cart">
-        <svg width="20" height="20"><use href="#ico-cart"/></svg>
-        <span class="badge" id="count">0</span>
-      </button>
-      <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav-actions">
+        <button class="cart-toggle-btn" id="cartToggleBtn" aria-label="Open Shopping Cart">
+          <span class="cart-btn-icon">🛒</span>
+          <span class="cart-btn-label">Cart</span>
+          <span class="cart-count-badge" id="navCartCount">0</span>
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
-  </div>
-</header>
+  </nav>
 
-<!-- ========== HERO ========== -->
-<section class="hero" id="home">
-  <div class="wrap hero-grid">
-    <div class="reveal">
-      <div class="hero-tag">🌿 100% Biodegradable &amp; Plastic-Free</div>
-      <h1 class="h1">Grow Green,<br><em>Live Clean.</em></h1>
-      <p class="hero-sub">EcoPot makes sustainable, biodegradable plant pots that replace single-use plastic. Plant them, watch them grow, and let the pot return to the soil.</p>
-      <div class="hero-btns">
-        <a href="#products" class="btn btn-dark">Shop Now →</a>
-        <a href="#about" class="btn btn-outline">Our Story</a>
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <p class="hero-tag">🌱 100% Biodegradable &amp; Sustainable</p>
+      <h1>Beautiful Pots.<br />Zero Guilt.</h1>
+      <p class="hero-desc">Hand-crafted eco-friendly pots made from natural, renewable materials. Nurture your plants and the planet at the same time.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">Shop Collection</a>
+        <a href="#about" class="btn btn-outline">Learn More</a>
       </div>
-      <div class="hero-chips">
-        <span class="chip">♻️ Plastic-free</span>
-        <span class="chip">🌱 Plant pot in soil</span>
-        <span class="chip">💚 Zero waste</span>
-      </div>
-    </div>
-    <div class="hero-visual reveal">
-      <div class="hero-bg-circle">
-        <svg class="hero-pot" id="heroArt" viewBox="0 0 200 200" aria-label="EcoPot hero illustration" role="img" xmlns="http://www.w3.org/2000/svg"></svg>
-      </div>
-      <div class="float-card fc1">
-        🪴 Plant &amp; Pot together<span>No repotting needed</span>
-      </div>
-      <div class="float-card fc2">
-        ✅ Eco Certified<span>100% natural materials</span>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num" data-target="50000">0</span>+
+          <span class="stat-label">Pots Sold</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-target="12000">0</span>+
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-target="100">0</span>%
+          <span class="stat-label">Eco-Friendly</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+    <div class="hero-scroll">
+      <a href="#about"><span></span></a>
+    </div>
+  </section>
 
-<!-- ========== TICKER ========== -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-track" id="ticker">
-    <span class="tick-item"><span class="tick-dot"></span>Biodegradable Plant Pots</span>
-    <span class="tick-item"><span class="tick-dot"></span>Zero Plastic Waste</span>
-    <span class="tick-item"><span class="tick-dot"></span>Plant the Pot &amp; Grow</span>
-    <span class="tick-item"><span class="tick-dot"></span>Made for Earth Lovers</span>
-    <span class="tick-item"><span class="tick-dot"></span>Affordable &amp; Sustainable</span>
-    <span class="tick-item"><span class="tick-dot"></span>Nursery Friendly</span>
-    <span class="tick-item"><span class="tick-dot"></span>Student Approved</span>
-    <span class="tick-item"><span class="tick-dot"></span>Biodegradable Plant Pots</span>
-    <span class="tick-item"><span class="tick-dot"></span>Zero Plastic Waste</span>
-    <span class="tick-item"><span class="tick-dot"></span>Plant the Pot &amp; Grow</span>
-    <span class="tick-item"><span class="tick-dot"></span>Made for Earth Lovers</span>
-    <span class="tick-item"><span class="tick-dot"></span>Affordable &amp; Sustainable</span>
-    <span class="tick-item"><span class="tick-dot"></span>Nursery Friendly</span>
-    <span class="tick-item"><span class="tick-dot"></span>Student Approved</span>
-  </div>
-</div>
-
-<!-- ========== ABOUT ========== -->
-<section id="about">
-  <div class="wrap about-grid">
-    <div class="about-visual reveal">
-      <div class="about-svg-wrap" id="aboutArt"></div>
-      <div class="stat-float sf1">
-        <div class="stat-num">100%</div>
-        <div class="stat-lbl">Biodegradable materials</div>
+  <!-- ========== ABOUT ========== -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Story</span>
+        <h2>Rooted in Sustainability</h2>
+        <p>We believe every plant deserves a home that doesn't cost the Earth — literally.</p>
       </div>
-      <div class="stat-float sf2">
-        <div class="stat-num">0g</div>
-        <div class="stat-lbl">Plastic used</div>
-      </div>
-    </div>
-    <div class="reveal">
-      <span class="label">About EcoPot</span>
-      <h2 class="h2">A small pot with a big purpose.</h2>
-      <p class="lead">EcoPot began with a simple question: why do healthy plants start life in plastic that lasts centuries? We serve students, plant lovers, home gardeners and nurseries who want to garden without the waste.</p>
-      <div class="pillars">
-        <div class="pillar">
-          <div class="pill-ico">🎯</div>
-          <div>
-            <h4>Our Mission</h4>
-            <p>Encourage green living and reduce plastic waste through sustainable gardening products.</p>
+      <div class="about-grid">
+        <div class="about-image">
+          <div class="about-img-frame">
+            <img 
+              src="https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=900&q=80" 
+              alt="Hands nurturing plant in sustainable eco pot" 
+              class="about-img" 
+              id="aboutImg"
+              loading="lazy"
+              onerror="handleAboutImgError(this)" 
+            />
+            <div class="about-eco-badge">
+              <span class="badge-icon">🌿</span>
+              <span>100% Plastic-Free Craftsmanship</span>
+            </div>
           </div>
         </div>
-        <div class="pillar">
-          <div class="pill-ico">🔭</div>
-          <div>
-            <h4>Our Vision</h4>
-            <p>A world where every plant begins its journey in a pot that heals the planet, not harms it.</p>
-          </div>
-        </div>
-        <div class="pillar">
-          <div class="pill-ico">🤝</div>
-          <div>
-            <h4>Our Commitment</h4>
-            <p>Responsible materials, honest practices and continuous improvement toward sustainability.</p>
+        <div class="about-text">
+          <h3>From Nature, For Nature</h3>
+          <p>EcoPot was founded in 2022 with a simple mission: replace plastic plant pots with beautiful, biodegradable alternatives. Every pot we create is made from sustainably sourced materials — coconut coir, rice husk, bamboo fiber, and organic clay.</p>
+          <p>Unlike plastic pots that persist in landfills for centuries, our pots naturally decompose, enriching the soil they return to. And because they're breathable, your plants actually grow healthier in them.</p>
+          <div class="about-features">
+            <div class="about-feature">
+              <span class="feature-icon">♻️</span>
+              <div>
+                <strong>100% Biodegradable</strong>
+                <p>Decomposes naturally within 2-5 years</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <span class="feature-icon">🌾</span>
+              <div>
+                <strong>Natural Materials</strong>
+                <p>Made from coconut coir, rice husk &amp; bamboo</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <span class="feature-icon">💧</span>
+              <div>
+                <strong>Plant-Friendly</strong>
+                <p>Breathable walls promote healthy root growth</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ========== PRODUCTS ========== -->
-<section id="products">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">Our Products</span>
-      <h2 class="h2">Pots that love your plants<br>and the planet</h2>
-      <p class="lead">Choose the right size for every stage of growth.</p>
-    </div>
-    <div class="grid4" id="productGrid"></div>
-    <p class="products-note">All prices are sample demo prices for illustration only.</p>
-  </div>
-</section>
+  <!-- ========== PRODUCTS ========== -->
+  <section class="section products" id="products">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Collection</span>
+        <h2>Handcrafted with Love</h2>
+        <p>Each pot is unique, sustainable, and designed to make your green space shine.</p>
+      </div>
 
-<!-- ========== WHY US ========== -->
-<section id="why">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">Why EcoPot?</span>
-      <h2 class="h2">Good for your garden.<br>Better for the Earth.</h2>
-    </div>
-    <div class="why-grid">
-      <div class="why-card reveal"><div class="why-ico">🌍</div><h4>100% Eco-friendly</h4><p>Designed from the ground up to replace plastic pots with no compromise.</p></div>
-      <div class="why-card reveal"><div class="why-ico">🍃</div><h4>Biodegradable Materials</h4><p>Pots that break down naturally in soil without leaving any residue.</p></div>
-      <div class="why-card reveal"><div class="why-ico">🌻</div><h4>Sustainable Gardening</h4><p>Plant the whole pot directly and avoid stressing roots during transplanting.</p></div>
-      <div class="why-card reveal"><div class="why-ico">💰</div><h4>Affordable Products</h4><p>Green living should fit every budget, especially for students and beginners.</p></div>
-      <div class="why-card reveal"><div class="why-ico">🛡️</div><h4>Environment Protection</h4><p>Less plastic waste means cleaner soil, water and air for all of us.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- Category Filter -->
+      <div class="product-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="indoor">Indoor</button>
+        <button class="filter-btn" data-filter="outdoor">Outdoor</button>
+        <button class="filter-btn" data-filter="hanging">Hanging</button>
+        <button class="filter-btn" data-filter="seed-starter">Seed Starters</button>
+      </div>
 
-<!-- ========== TEAM ========== -->
-<section id="team">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">Our Team</span>
-      <h2 class="h2">The people behind EcoPot</h2>
-      <p class="lead">A passionate team turning a green idea into a greener future.</p>
-    </div>
-    <div class="team-grid">
-      <div class="member reveal">
-        <div class="member-av">S</div>
-        <h4>Shivanshi</h4>
-        <div class="role">Founder &amp; CEO</div>
-        <p>Drives the vision of a plastic-free gardening world with bold ideas and relentless passion.</p>
-        <div class="member-line"></div>
-      </div>
-      <div class="member reveal">
-        <div class="member-av">T</div>
-        <h4>Taniya</h4>
-        <div class="role">Product &amp; Design Lead</div>
-        <p>Designs every pot to be beautiful, functional and kind to the planet.</p>
-        <div class="member-line"></div>
-      </div>
-      <div class="member reveal">
-        <div class="member-av">S</div>
-        <h4>Sneha</h4>
-        <div class="role">Marketing &amp; Outreach</div>
-        <p>Spreads the EcoPot mission to plant lovers, nurseries and communities everywhere.</p>
-        <div class="member-line"></div>
-      </div>
-      <div class="member reveal">
-        <div class="member-av">S</div>
-        <h4>Simran</h4>
-        <div class="role">Operations &amp; Sustainability</div>
-        <p>Ensures every step of production stays true to our eco-friendly commitment.</p>
-        <div class="member-line"></div>
-      </div>
-    </div>
-  </div>
-</section>
+      <div class="product-grid" id="productGrid">
+        <!-- Product 1 -->
+        <div class="product-card" data-category="indoor" data-id="1">
+          <div class="product-badge">Best Seller</div>
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80" 
+              alt="Coconut Coir Pot" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🪴', '#a8d5a2', '#6b9e6b')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Indoor</span>
+            <h3 class="product-title">Coconut Coir Pot</h3>
+            <p>Perfect for small indoor plants. Made from compressed coconut fiber.</p>
+            <div class="product-footer">
+              <span class="product-price">$12.99</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(1)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
 
-<!-- ========== HOW IT WORKS ========== -->
-<section id="how">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">How It Works</span>
-      <h2 class="h2">From seed to soil in<br>four simple steps</h2>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-num"></div>
-        <h4>Fill</h4>
-        <p>Add potting soil to your EcoPot, leaving a little space at the top for watering.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num"></div>
-        <h4>Sow</h4>
-        <p>Plant your seed or seedling into the soil and water it gently until moist.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num"></div>
-        <h4>Grow</h4>
-        <p>Keep it in good light and water regularly as your plant thrives and roots expand.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-num"></div>
-        <h4>Transplant</h4>
-        <p>Place the whole pot into the garden or a bigger container. It biodegrades naturally.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <!-- Product 2 -->
+        <div class="product-card" data-category="outdoor" data-id="2">
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1512428813834-c702c7702b78?auto=format&fit=crop&w=600&q=80" 
+              alt="Bamboo Fiber Planter" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🏺', '#d4a574', '#b8956a')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Outdoor</span>
+            <h3 class="product-title">Bamboo Fiber Planter</h3>
+            <p>Sturdy and weather-resistant. Ideal for balcony and garden use.</p>
+            <div class="product-footer">
+              <span class="product-price">$18.99</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(2)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
 
-<!-- ========== IMPACT ========== -->
-<section id="impact">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">Our Impact</span>
-      <h2 class="h2">The change we are<br>working toward</h2>
-      <p class="lead">Our sustainability goals for the coming years.</p>
-    </div>
-    <div class="stats">
-      <div class="stat-box reveal"><b data-t="100000" data-s="+">0</b><span>Plastic pots replaced (target)</span></div>
-      <div class="stat-box reveal"><b data-t="25" data-s=" t">0</b><span>Plastic waste avoided (target)</span></div>
-      <div class="stat-box reveal"><b data-t="500" data-s="+">0</b><span>Nursery partners (target)</span></div>
-      <div class="stat-box reveal"><b data-t="10000" data-s="+">0</b><span>Trees &amp; plants grown (target)</span></div>
-    </div>
-    <p class="products-note" style="margin-top:28px">These figures are illustrative targets, not achieved results.</p>
-  </div>
-</section>
+        <!-- Product 3 -->
+        <div class="product-card" data-category="indoor" data-id="3">
+          <div class="product-badge eco">Eco Pick</div>
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=600&q=80" 
+              alt="Rice Husk Mini Pot" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🌱', '#c8b99a', '#a89878')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Indoor</span>
+            <h3 class="product-title">Rice Husk Mini Pot</h3>
+            <p>Compact and charming. Great for succulents, ferns, and cacti.</p>
+            <div class="product-footer">
+              <span class="product-price">$8.49</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(3)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
 
-<!-- ========== REVIEWS ========== -->
-<section id="reviews">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="label">Customer Reviews</span>
-      <h2 class="h2">What plant lovers might say</h2>
-    </div>
-    <div class="reviews">
-      <div class="review reveal">
-        <div class="review-quote">"</div>
-        <div class="stars">★★★★★</div>
-        <p>The pots are sturdy and look lovely on my study desk. Planting the whole pot into soil felt absolutely wonderful.</p>
-        <div class="reviewer">
-          <div class="rev-av">A</div>
-          <div>
-            <div class="rev-av-name">Aarav S. <span class="demo-tag">Demo</span></div>
-            <div class="rev-av-role">College student</div>
+        <!-- Product 4 -->
+        <div class="product-card" data-category="hanging" data-id="4">
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&w=600&q=80" 
+              alt="Jute Hanging Basket" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🌿', '#8bc6a0', '#5a9c6a')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Hanging</span>
+            <h3 class="product-title">Jute Hanging Basket</h3>
+            <p>Hand-woven jute basket with a waterproof coconut liner.</p>
+            <div class="product-footer">
+              <span class="product-price">$22.99</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(4)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="product-card" data-category="seed-starter" data-id="5">
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1592150621744-aca64f48394a?auto=format&fit=crop&w=600&q=80" 
+              alt="Peat-Free Starter Kit" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🌾', '#b5d6a7', '#7ab86e')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Seed Starter</span>
+            <h3 class="product-title">Peat-Free Starter Kit</h3>
+            <p>Set of 24 biodegradable seed pots. Plant directly into soil!</p>
+            <div class="product-footer">
+              <span class="product-price">$14.99</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(5)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="product-card" data-category="outdoor" data-id="6">
+          <div class="product-badge">New</div>
+          <div class="product-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80" 
+              alt="Organic Clay Planter" 
+              class="product-real-img"
+              loading="lazy"
+              onerror="handleProductImgError(this, '🪨', '#d4c5a0', '#b8a878')" 
+            />
+          </div>
+          <div class="product-info">
+            <span class="product-category">Outdoor</span>
+            <h3 class="product-title">Organic Clay Planter</h3>
+            <p>Hand-thrown organic clay, fired at low temp. Classic and timeless.</p>
+            <div class="product-footer">
+              <span class="product-price">$26.99</span>
+              <button class="btn btn-sm btn-add-cart" onclick="addToCart(6)">
+                <span>🛒</span> Add to Cart
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="review reveal">
-        <div class="review-quote">"</div>
-        <div class="stars">★★★★★</div>
-        <p>Perfect for my balcony garden. My herbs sprouted well and I feel genuinely good about cutting down plastic use.</p>
-        <div class="reviewer">
-          <div class="rev-av">P</div>
-          <div>
-            <div class="rev-av-name">Priya M. <span class="demo-tag">Demo</span></div>
-            <div class="rev-av-role">Home gardener</div>
-          </div>
-        </div>
-      </div>
-      <div class="review reveal">
-        <div class="review-quote">"</div>
-        <div class="stars">★★★★☆</div>
-        <p>A great idea for our nursery. Customers love that the pot can go straight into the ground without any mess.</p>
-        <div class="reviewer">
-          <div class="rev-av">R</div>
-          <div>
-            <div class="rev-av-name">Rakesh V. <span class="demo-tag">Demo</span></div>
-            <div class="rev-av-role">Nursery owner</div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ========== CONTACT ========== -->
-<section id="contact">
-  <div class="wrap">
-    <div class="reveal" style="margin-bottom:16px">
-      <span class="label">Contact Us</span>
-      <h2 class="h2">Let's grow something<br>good together.</h2>
-    </div>
-    <div class="contact-grid">
-      <div class="reveal">
-        <p class="lead">Questions, bulk orders for nurseries, or partnership ideas? Send us a note — we'd love to hear from you.</p>
-        <div class="contact-detail">
-          <div class="c-ico">✉️</div>
-          <a href="mailto:hello@ecopot.example">hello@ecopot.example</a>
+  <!-- ========== BENEFITS ========== -->
+  <section class="section benefits" id="benefits">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Why EcoPot?</span>
+        <h2>Better for Plants. Better for Earth.</h2>
+        <p>Discover why thousands of gardeners are making the switch.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🌍</div>
+          <h3>Zero Plastic Waste</h3>
+          <p>Every EcoPot replaces a plastic pot that would sit in a landfill for 500+ years. Our pots return to the earth naturally.</p>
         </div>
-        <div class="contact-detail">
-          <div class="c-ico">🎓</div>
-          <a href="mailto:2405301090@geetauniversity.edu.in">2405301090@geetauniversity.edu.in</a>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌬️</div>
+          <h3>Breathable Walls</h3>
+          <p>Unlike plastic, our pots allow air to reach the roots, preventing root rot and promoting stronger, healthier plant growth.</p>
         </div>
-        <p style="font-size:.78rem;color:var(--muted);margin-top:6px">(Sample emails — replace with your real address.)</p>
-        <div class="social">
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg width="20" height="20"><use href="#ico-ig"/></svg>
-          </a>
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
-            <svg width="20" height="20"><use href="#ico-fb"/></svg>
-          </a>
+        <div class="benefit-card">
+          <div class="benefit-icon">💧</div>
+          <h3>Natural Moisture Control</h3>
+          <p>The organic fibers naturally regulate moisture, reducing overwatering and keeping your plants perfectly hydrated.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🐛</div>
+          <h3>Chemical-Free</h3>
+          <p>No harmful dyes, chemicals, or synthetic coatings. Safe for edible plants, kids, and pets.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌡️</div>
+          <h3>Temperature Regulation</h3>
+          <p>Natural materials insulate roots against extreme heat and cold, extending the growing season.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🤝</div>
+          <h3>Fair Trade Crafted</h3>
+          <p>Every pot is handmade by artisan communities who are paid fair wages and work in safe conditions.</p>
         </div>
       </div>
-      <div class="reveal">
-        <form class="form-card" id="form" novalidate>
-          <div class="field">
-            <label for="name">Your Name</label>
-            <input id="name" type="text" placeholder="e.g. Aarav Sharma" autocomplete="name">
-            <div class="err">Please enter your name (at least 2 characters).</div>
+    </div>
+  </section>
+
+  <!-- ========== ENVIRONMENTAL IMPACT ========== -->
+  <section class="section impact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Impact</span>
+        <h2>Numbers That Matter</h2>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-number" data-target="25">0</div>
+          <p>Tons of plastic prevented from entering landfills</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-number" data-target="150">0</div>
+          <p>Artisan families supported worldwide</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-number" data-target="5000">0</div>
+          <p>Trees planted through our reforestation program</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-number" data-target="98">0</div>
+          <p>Percent of our supply chain is carbon-neutral</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT'S MADE ========== -->
+  <section class="section process" id="process">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Process</span>
+        <h2>From Farm to Your Home</h2>
+        <p>Every EcoPot goes through a mindful, low-impact production process.</p>
+      </div>
+      <div class="process-timeline">
+        <div class="process-step">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h3>Source</h3>
+            <p>We collect agricultural byproducts — coconut husks, rice hulls, and bamboo offcuts — from local farms. Nothing goes to waste.</p>
           </div>
-          <div class="field">
-            <label for="email">Email Address</label>
-            <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
-            <div class="err">Please enter a valid email address.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h3>Process</h3>
+            <p>Raw materials are cleaned, shredded, and mixed with natural binding agents like cassava starch and natural latex.</p>
           </div>
-          <div class="field">
-            <label for="msg">Message</label>
-            <textarea id="msg" placeholder="How can we help you?"></textarea>
-            <div class="err">Please write a message (at least 10 characters).</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h3>Mold &amp; Shape</h3>
+            <p>Artisans hand-press the mixture into molds, creating each pot with care and attention to detail.</p>
           </div>
-          <button class="btn btn-dark" type="submit" style="width:100%;justify-content:center">Send Message →</button>
-          <div class="form-msg" id="formmsg"></div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <h3>Dry &amp; Cure</h3>
+            <p>Pots are sun-dried naturally — no energy-intensive kilns. This gives each pot its unique texture and character.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">05</div>
+          <div class="step-content">
+            <h3>Ship Sustainably</h3>
+            <p>We use recycled cardboard packaging with zero plastic. Shipping is carbon-offset through our reforestation partners.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="section testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Reviews</span>
+        <h2>What Our Customers Say</h2>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"I replaced all my plastic pots with EcoPots and my plants have never been happier. The difference in root health is remarkable!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SA</div>
+            <div>
+              <strong>Sarah A.</strong>
+              <span>Urban Gardener</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Beautiful craftsmanship and knowing they're sustainable makes me love them even more. The bamboo planters are stunning on my patio."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MK</div>
+            <div>
+              <strong>Michael K.</strong>
+              <span>Landscape Designer</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"The seed starter kit is genius! I just plant the whole pot into the ground — no transplant shock. My seedling survival rate went way up."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">PL</div>
+            <div>
+              <strong>Priya L.</strong>
+              <span>Home Gardener</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="section faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">FAQ</span>
+        <h2>Common Questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            How long do EcoPots last?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Our pots typically last 2–5 years depending on conditions. Indoor pots last longer, while outdoor pots gradually decompose as intended. If you want to extend their life, keep them sheltered from constant heavy rain.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Are they waterproof?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Our pots are water-resistant, not fully waterproof — and that's by design! The slight porosity allows air to reach the roots, which is actually healthier for plants. We include a natural saucer with each pot to protect surfaces.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I plant the pot directly in the ground?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! Our seed starter pots are specifically designed for this. Simply plant the entire pot into the soil — it will decompose and nourish the plant. For larger pots, we recommend removing the plant first for best results.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do you ship internationally?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! We ship to over 30 countries. All international shipments are carbon-offset and we use recyclable packaging materials. Delivery typically takes 7–14 business days depending on your location.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What if my pot arrives damaged?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We have a no-questions-asked replacement policy. Simply send us a photo of the damaged pot and we'll ship a new one right away — free of charge. The damaged pot can be composted!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== NEWSLETTER ========== -->
+  <section class="section newsletter">
+    <div class="container">
+      <div class="newsletter-box">
+        <div class="newsletter-content">
+          <h2>🌿 Join the Green Movement</h2>
+          <p>Get 15% off your first order plus eco-living tips, new product alerts, and exclusive offers.</p>
+          <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+            <input type="email" placeholder="Enter your email address" required />
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+          <p class="newsletter-note">No spam, ever. Unsubscribe anytime. 🌎</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Get in Touch</span>
+        <h2>We'd Love to Hear From You</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <div>
+              <strong>Visit Us</strong>
+              <p>42 Green Lane, Eco District<br />Portland, OR 97201</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📧</span>
+            <div>
+              <strong>Email Us</strong>
+              <p>hello@ecopot.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <div>
+              <strong>Call Us</strong>
+              <p>+1 (503) 555-0142</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">⏰</span>
+            <div>
+              <strong>Hours</strong>
+              <p>Mon–Fri: 9am–6pm PST<br />Sat: 10am–4pm PST</p>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" placeholder="What's this about?" />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="5" placeholder="Tell us how we can help..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Send Message</button>
         </form>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ========== FOOTER ========== -->
-<footer>
-  <div class="wrap">
-    <div class="foot">
-      <div class="foot-brand">
-        <a href="#home" class="logo" aria-label="EcoPot">
-          <div class="logo-mark">🌱</div>
-          EcoPot
-        </a>
-        <p>Grow Green, Live Clean. Biodegradable plant pots for a plastic-free future — one pot at a time.</p>
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><span class="logo-icon">🌿</span> EcoPot</h3>
+          <p>Handcrafted, biodegradable plant pots made with love for your plants and the planet.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram">📷</a>
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="Pinterest">📌</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#products">All Products</a></li>
+            <li><a href="#">Indoor Pots</a></li>
+            <li><a href="#">Outdoor Planters</a></li>
+            <li><a href="#">Hanging Baskets</a></li>
+            <li><a href="#">Seed Starters</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#about">Our Story</a></li>
+            <li><a href="#process">How It's Made</a></li>
+            <li><a href="#">Sustainability Report</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Kit</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#contact">Contact Us</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">Bulk Orders</a></li>
+            <li><a href="#">Gift Cards</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h5>Explore</h5>
-        <ul>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#products">Products</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#impact">Our Impact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Connect</h5>
-        <ul>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <p>&copy; 2026 EcoPot. All rights reserved. Made with 💚 for the planet.</p>
       </div>
     </div>
-    <div class="copy">
-      © <span id="year"></span> EcoPot. All rights reserved. &nbsp;·&nbsp; Demo website: prices, stats and reviews are samples.
+  </footer>
+
+  <!-- ========== FLOATING QUICK CART BUTTON ========== -->
+  <button class="floating-cart-btn" id="floatingCartBtn" aria-label="View Shopping Cart">
+    <span class="floating-cart-icon">🛒</span>
+    <span class="floating-cart-badge" id="floatingCartBadge">0</span>
+  </button>
+
+  <!-- ========== BACK TO TOP ========== -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- ========== CART BACKDROP & SLIDE-OUT DRAWER ========== -->
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-header">
+      <div class="cart-title-wrap">
+        <span class="cart-title-icon">🛒</span>
+        <h3>Your Eco Cart</h3>
+        <span class="cart-header-count" id="cartHeaderCount">(0 items)</span>
+      </div>
+      <button class="cart-close-btn" id="closeCartBtn" aria-label="Close Shopping Cart">&times;</button>
+    </div>
+
+    <div class="cart-eco-banner">
+      <span>🌱</span> Every order funds 1 tree planted &amp; ships in 100% compostable packaging!
+    </div>
+
+    <!-- Scrollable Items Container -->
+    <div class="cart-items" id="cartItemsList">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Summary & Checkout Footer -->
+    <div class="cart-footer" id="cartFooter">
+      <div class="cart-summary-line">
+        <span>Subtotal</span>
+        <span class="summary-val" id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Eco Packaging &amp; Shipping</span>
+        <span class="summary-badge green">FREE</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Carbon Offset</span>
+        <span class="summary-badge green">$0.00 Included</span>
+      </div>
+      <div class="cart-summary-total">
+        <span>Estimated Total</span>
+        <span class="total-val" id="cartTotal">$0.00</span>
+      </div>
+
+      <div class="cart-actions">
+        <button class="btn btn-primary btn-full checkout-btn" id="checkoutBtn">
+          Proceed to Checkout 🌿
+        </button>
+        <button class="btn-clear-cart" id="clearCartBtn">Clear Cart</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== CHECKOUT MODAL ========== -->
+  <div class="checkout-modal-backdrop" id="checkoutModal">
+    <div class="checkout-modal-card">
+      <button class="checkout-close-btn" id="closeCheckoutBtn">&times;</button>
+      <div id="checkoutFormContent">
+        <div class="checkout-header">
+          <span class="checkout-icon">🌱</span>
+          <h3>Sustainable Checkout</h3>
+          <p>Zero plastic packaging • Carbon-neutral delivery</p>
+        </div>
+        <div class="checkout-order-preview">
+          <span>Items in Order: <strong id="checkoutItemCount">0</strong></span>
+          <span>Order Total: <strong id="checkoutTotal">$0.00</strong></span>
+        </div>
+        <form class="checkout-form" id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+          <div class="form-group">
+            <label for="cName">Full Name</label>
+            <input type="text" id="cName" placeholder="Emma Green" required />
+          </div>
+          <div class="form-group">
+            <label for="cEmail">Email for Order Updates</label>
+            <input type="email" id="cEmail" placeholder="emma@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="cAddress">Shipping Address</label>
+            <input type="text" id="cAddress" placeholder="123 Evergreen Terrace, Suite 4" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cCity">City</label>
+              <input type="text" id="cCity" placeholder="Portland" required />
+            </div>
+            <div class="form-group">
+              <label for="cZip">ZIP / Postal Code</label>
+              <input type="text" id="cZip" placeholder="97201" required />
+            </div>
+          </div>
+          <div class="checkout-payment-box">
+            <div class="payment-title">Payment Method (Demo Mode)</div>
+            <div class="payment-options">
+              <label class="payment-radio">
+                <input type="radio" name="payment" checked />
+                <span>💳 Credit Card</span>
+              </label>
+              <label class="payment-radio">
+                <input type="radio" name="payment" />
+                <span>🌿 Eco-Pay / Google Pay</span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full checkout-submit-btn">
+            Place Sustainable Order ✨
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Screen -->
+      <div class="checkout-success" id="checkoutSuccess" style="display: none;">
+        <div class="success-icon">🎉</div>
+        <h3>Thank You For Planting Green!</h3>
+        <p class="order-id">Order <span id="confirmedOrderId">#ECO-89214</span> has been placed.</p>
+        <p class="success-desc">
+          We are preparing your biodegradable pots with zero plastic. 
+          A confirmation and tracking link have been sent to your email.
+        </p>
+        <div class="tree-planted-card">
+          <span class="tree-icon">🌳</span>
+          <div>
+            <strong>1 Tree Planted!</strong>
+            <p>Your order just planted a mangrove seedling in Madagascar.</p>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" id="continueShoppingBtn">
+          Continue Browsing
+        </button>
+      </div>
     </div>
   </div>
-</footer>
 
-<!-- ========== CART DRAWER ========== -->
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Shopping cart" aria-hidden="true">
-  <div class="drawer-head">
-    <h3>Your Cart 🛒</h3>
-    <button class="drawer-close" id="closeCart" aria-label="Close cart">✕</button>
-  </div>
-  <div class="cart-items" id="items"></div>
-  <div class="drawer-foot">
-    <div class="cart-total"><span>Total</span><span class="t-num" id="total">₹0</span></div>
-    <button class="btn btn-dark checkout-btn" id="checkout">Checkout →</button>
-    <small>Demo store — no real payments processed.</small>
-  </div>
-</aside>
+  <!-- ========== TOAST NOTIFICATION CONTAINER ========== -->
+  <div class="toast-container" id="toastContainer"></div>
 
-<div class="toast" id="toast" role="status"></div>
-<button id="scroll-top" aria-label="Back to top">↑</button>
-
-<!-- ========== SCRIPTS ========== -->
-<script>
-(function () {
-  "use strict";
-  var $ = function(s) { return document.querySelector(s); };
-  var $$ = function(s) { return document.querySelectorAll(s); };
-
-  /* ── Plant pot SVG art generator ── */
-  function leaf(x, y, r, s, c) {
-    return '<path d="M0 0C-14-18-8-44 0-56C8-44 14-18 0 0Z" fill="' + c + '" transform="translate(' + x + ' ' + y + ') rotate(' + r + ') scale(' + s + ')"/>';
-  }
-  function art(k) {
-    var g1 = "#2e6b4f", g2 = "#1a4731", g3 = "#5a9e7a";
-    var s = '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">';
-    if (k === "mini") {
-      s += leaf(100, 122, -40, .7, g3) + leaf(100, 122, 40, .7, g1) + leaf(100, 122, 0, .95, g2)
-        + '<path d="M68 126h64l-8 46H76Z" fill="#c5914a"/>'
-        + '<rect x="62" y="116" width="76" height="14" rx="7" fill="#a87035"/>';
-    } else if (k === "medium") {
-      s += leaf(100, 110, -60, .9, g3) + leaf(100, 110, -25, 1.05, g1) + leaf(100, 110, 0, 1.2, g2) + leaf(100, 110, 28, 1.05, g1) + leaf(100, 110, 60, .9, g3)
-        + '<path d="M52 116h96l-12 62H64Z" fill="#c5914a"/>'
-        + '<rect x="46" y="104" width="108" height="16" rx="8" fill="#a87035"/>'
-        + '<path d="M60 140h80M64 158h72" stroke="#d4a870" stroke-width="2.5" opacity=".6"/>';
-    } else if (k === "premium") {
-      s += leaf(100, 100, -70, 1, g3) + leaf(100, 100, -40, 1.2, g1) + leaf(100, 100, -12, 1.35, g2) + leaf(100, 100, 14, 1.3, g1) + leaf(100, 100, 42, 1.2, g2) + leaf(100, 100, 70, 1, g3)
-        + '<path d="M44 108h112l-14 72H58Z" fill="#1a4731"/>'
-        + '<rect x="38" y="96" width="124" height="18" rx="9" fill="#c5914a"/>'
-        + '<path d="M52 136h96M56 156h88" stroke="#5a9e7a" stroke-width="2.5" opacity=".6"/>'
-        + '<circle cx="100" cy="128" r="9" fill="#5a9e7a"/>';
-    } else {
-      s += '<rect x="22" y="160" width="156" height="14" rx="7" fill="#a87035"/>';
-      [48, 100, 152].forEach(function (cx, i) {
-        s += leaf(cx, 128, -30, .5, g3) + leaf(cx, 128, 30, .5, g1) + (i === 1 ? leaf(cx, 128, 0, .65, g2) : "")
-          + '<path d="M' + (cx - 22) + ' 130h44l-5 32H' + (cx - 17) + 'Z" fill="#c5914a"/>'
-          + '<rect x="' + (cx - 25) + '" y="124" width="50" height="9" rx="4.5" fill="#a87035"/>';
-      });
-    }
-    return s + '</svg>';
-  }
-
-  /* Hero & About art */
-  var heroSvg = document.getElementById("heroArt");
-  if (heroSvg) heroSvg.outerHTML = art("premium").replace('<svg', '<svg class="hero-pot" id="heroArtDone"');
-  var aboutDiv = document.getElementById("aboutArt");
-  if (aboutDiv) aboutDiv.innerHTML = art("medium");
-
-  /* ── Products ── */
-  var products = [
-    { id: 1, name: "Mini Biodegradable Pots", desc: "Pack of 10 small pots, ideal for herbs, succulents and desk plants.", price: 149, kind: "mini", img: "img-mini.png" },
-    { id: 2, name: "Medium Eco Pots", desc: "Pack of 5 sturdy pots for flowering plants and vegetables.", price: 249, kind: "medium", img: "img-medium.png" },
-    { id: 3, name: "Premium Garden Pots", desc: "Large, durable, plant-fibre pots for shrubs and patio gardens.", price: 449, kind: "premium", img: "img-premium.png" },
-    { id: 4, name: "Seed Starter Pots", desc: "Tray of 12 starter cells — plant seedlings directly into soil.", price: 199, kind: "seed", img: "img-seed.png" }
-  ];
-  var money = function (n) { return "\u20B9" + n.toLocaleString("en-IN"); };
-
-  $("#productGrid").innerHTML = products.map(function (p) {
-    return '<article class="card">'
-      + '<div class="card-img"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy"'
-      + ' onerror="this.parentNode.innerHTML=\'<div style=&quot;font-size:3rem;padding:40px;&quot;>🪴</div>\'"></div>'
-      + '<div class="card-body">'
-      + '<h3>' + p.name + '</h3>'
-      + '<p>' + p.desc + '</p>'
-      + '<div class="card-foot">'
-      + '<span class="price">' + money(p.price) + '</span>'
-      + '<button class="add-btn" data-id="' + p.id + '">'
-      + '<svg width="14" height="14"><use href="#ico-plus"/></svg> Add'
-      + '</button>'
-      + '</div></div></article>';
-  }).join("");
-
-  /* ── Cart ── */
-  var cart = {};
-  try { var s = JSON.parse(localStorage.getItem("ecopot-cart") || "{}"); if (s && typeof s === "object") cart = s; } catch (e) {}
-  function save() { try { localStorage.setItem("ecopot-cart", JSON.stringify(cart)); } catch (e) {} }
-  function byId(id) { return products.filter(function (p) { return p.id == id; })[0]; }
-
-  function toast(msg) {
-    var t = $("#toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
-  }
-
-  function renderCart() {
-    var ids = Object.keys(cart).filter(function (id) { return byId(id) && cart[id] > 0; });
-    var n = 0, sum = 0, h = "";
-    ids.forEach(function (id) {
-      var p = byId(id), q = cart[id]; n += q; sum += p.price * q;
-      h += '<div class="cart-item">'
-        + '<div class="cart-thumb">' + art(p.kind) + '</div>'
-        + '<div><h5>' + p.name + '</h5><small>' + money(p.price) + ' each</small>'
-        + '<div class="qty-ctrl">'
-        + '<button class="qty-btn" data-a="dec" data-id="' + id + '" aria-label="Decrease">−</button>'
-        + '<span class="qty-num">' + q + '</span>'
-        + '<button class="qty-btn" data-a="inc" data-id="' + id + '" aria-label="Increase">+</button>'
-        + '</div></div>'
-        + '<button class="rm-btn" data-a="rm" data-id="' + id + '">Remove</button>'
-        + '</div>';
-    });
-    $("#items").innerHTML = h || '<div class="cart-empty">🌱<br>Your cart is empty.<br>Add a pot to get started!</div>';
-    $("#count").textContent = n;
-    $("#total").textContent = money(sum);
-  }
-
-  function openCart(o) {
-    $("#drawer").classList.toggle("show", o);
-    $("#overlay").classList.toggle("show", o);
-    $("#drawer").setAttribute("aria-hidden", !o);
-    document.body.style.overflow = o ? "hidden" : "";
-  }
-
-  $("#productGrid").addEventListener("click", function (e) {
-    var b = e.target.closest(".add-btn"); if (!b) return;
-    var id = b.dataset.id; cart[id] = (cart[id] || 0) + 1; save(); renderCart();
-    toast(byId(id).name + " added to cart 🌱");
-  });
-  $("#items").addEventListener("click", function (e) {
-    var b = e.target.closest("[data-a]"); if (!b) return;
-    var id = b.dataset.id, a = b.dataset.a;
-    if (a === "inc") cart[id]++;
-    if (a === "dec") { cart[id]--; if (cart[id] <= 0) delete cart[id]; }
-    if (a === "rm") delete cart[id];
-    save(); renderCart();
-  });
-  $("#openCart").onclick = function () { openCart(true); };
-  $("#closeCart").onclick = $("#overlay").onclick = function () { openCart(false); };
-  $("#checkout").onclick = function () {
-    if (!Object.keys(cart).length) { toast("Your cart is empty — add a pot first! 🪴"); return; }
-    toast("Demo store: checkout & payments not connected yet.");
-  };
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { openCart(false); closeMenu(); }
-  });
-
-  /* ── Mobile nav ── */
-  var burger = $("#burger"), menu = $("#menu");
-  function closeMenu() { menu.classList.remove("open"); burger.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); }
-  burger.onclick = function () {
-    var o = menu.classList.toggle("open"); burger.classList.toggle("open", o);
-    burger.setAttribute("aria-expanded", o);
-  };
-  $$("#menu a").forEach(function (a) { a.addEventListener("click", closeMenu); });
-
-  /* ── Scroll effects ── */
-  var header = $("#header"), scrollTop = $("#scroll-top");
-  function onScroll() {
-    var y = window.scrollY;
-    header.classList.toggle("scrolled", y > 40);
-    scrollTop.classList.toggle("show", y > 600);
-    var cur = "home";
-    $$("main section").forEach(function (s) { if (s.offsetTop - 120 <= y) cur = s.id; });
-    $$("#menu a").forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + cur); });
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-  scrollTop.onclick = function () { window.scrollTo({ top: 0, behavior: "smooth" }); };
-
-  /* ── Reveal + counters ── */
-  function countUp(el) {
-    var t = +el.dataset.t, suf = el.dataset.s || "", st = null;
-    function frame(ts) {
-      st = st || ts;
-      var p = Math.min((ts - st) / 2000, 1);
-      el.textContent = Math.floor(t * (1 - Math.pow(1 - p, 3))).toLocaleString("en-IN") + (p === 1 ? suf : "");
-      if (p < 1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          var b = e.target.querySelector("b[data-t]");
-          if (b && !b._counted) { b._counted = true; countUp(b); }
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: .12 });
-    $$(".reveal").forEach(function (el) { io.observe(el); });
-  } else {
-    $$(".reveal").forEach(function (el) { el.classList.add("in"); });
-    $$("b[data-t]").forEach(function (b) { b.textContent = (+b.dataset.t).toLocaleString("en-IN") + (b.dataset.s || ""); });
-  }
-
-  /* ── Contact form ── */
-  $("#form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var n = $("#name"), m = $("#email"), g = $("#msg"), ok = true;
-    function chk(el, valid) { el.parentNode.classList.toggle("bad", !valid); if (!valid) ok = false; }
-    chk(n, n.value.trim().length >= 2);
-    chk(m, /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m.value.trim()));
-    chk(g, g.value.trim().length >= 10);
-    var out = $("#formmsg");
-    if (ok) {
-      out.style.display = "block";
-      out.textContent = "Thanks, " + n.value.trim() + "! Your details passed validation. This is a front-end demo, so your message has not been sent — connect a backend to receive messages.";
-      e.target.reset();
-    } else { out.style.display = "none"; }
-  });
-  $$("#form input, #form textarea").forEach(function (el) {
-    el.addEventListener("input", function () { el.parentNode.classList.remove("bad"); });
-  });
-
-  $("#year").textContent = new Date().getFullYear();
-  renderCart();
-})();
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
